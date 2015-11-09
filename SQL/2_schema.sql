@@ -25,8 +25,8 @@ CREATE TABLE clubs (
   gründungsjahr smallint NOT NULL
 );
 
-CREATE TABLE clubverteilungen (
-  clubLigaId integer PRIMARY KEY,
+CREATE TABLE ligazuteilungen (
+  ligazuteilungsId integer PRIMARY KEY,
   club integer NOT NULL,
   liga integer  NOT NULL
 );

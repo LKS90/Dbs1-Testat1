@@ -50,10 +50,9 @@ h3 {
     Budget DOUBLE NOT NULL, <br>
     Gründungsjahr INT NOT NULL)</p>
 <hr>
-<p>Clubverteilungen(<pk>ClubVerteilungsId</pk> INT, <br>
+<p>Ligazuteilungen(<pk>LigaZuteilungsId</pk> INT, <br>
 	  <fk>Club</fk> REFERENCES Clubs(ClubId), <br>
-    <fk>Liga</fk> REFERENCES Ligen(LigaId), <br>
-		Position INT NOT NULL)</p>
+    <fk>Liga</fk> REFERENCES Ligen(LigaId))</p>
 <hr>
 <p>Angestellten(<pk>AngId</pk> INT, <br>
     Vorname TEXT NOT NULL, <br>

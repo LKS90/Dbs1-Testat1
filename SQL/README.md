@@ -16,6 +16,10 @@ Hier das Script zum erstellen beliebig vieler Daten.
 
 http://jsfiddle.net/LKS90/o97zd65a/5
 
+Dazu passend, die zuschauerverteilungen:
+
+http://jsfiddle.net/LKS90/wryu1fdL/1/
+
 Ausführen der Skripts auf den verschiedenen Systemen
 ====================================================
 

@@ -39,8 +39,8 @@ INSERT INTO ligen (ligaid, name, preisgeld, saison) VALUES
 (7, 'Bundesliga', 5000000.0, 2009),
 (8, 'Fussball-Regionalliga Nord', 5000.0, 2016);
 
--- Table clubverteilungen
-INSERT INTO clubverteilungen (clubLigaid, club, liga) VALUES
+-- Table ligazuteilungen
+INSERT INTO ligazuteilungen (ligazuteilungsId, club, liga) VALUES
 (1, 1, 2),
 (2, 2, 2),
 (3, 3, 2),
@@ -103,12 +103,12 @@ INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position,
 (1028, 'Mario', 'Gavranovic', NULL, 7, 'Angriff', NULL),
 (1029, 'Armando', 'Sadiku', NULL, 11, 'Angriff', NULL),
 (1030, 'Nico', 'Elvedi', NULL, 30, 'Verteidigung', NULL),
-(1031, 'Axel', 'Borgmann', NULL, 21, 'Verteidigung', NULL), 
-(1032, 'Migjen', 'Basha', NULL, 11, 'Mittelfeld', NULL), 
-(1033, 'Naser', 'Aliji', NULL, 27, 'Verteidigung', NULL), 
-(1034, 'Albion', 'Avdijaj', NULL, 7, 'Angriff', NULL), 
-(1035, 'Mergim', 'Brahimi', NULL, 11, 'Mittelfeld', NULL), 
-(1036, 'Sandro', 'Lombardi', NULL, 12, 'Mittelfeld', NULL); 
+(1031, 'Axel', 'Borgmann', NULL, 21, 'Verteidigung', NULL),
+(1032, 'Migjen', 'Basha', NULL, 11, 'Mittelfeld', NULL),
+(1033, 'Naser', 'Aliji', NULL, 27, 'Verteidigung', NULL),
+(1034, 'Albion', 'Avdijaj', NULL, 7, 'Angriff', NULL),
+(1035, 'Mergim', 'Brahimi', NULL, 11, 'Mittelfeld', NULL),
+(1036, 'Sandro', 'Lombardi', NULL, 12, 'Mittelfeld', NULL);
 
 
 -- TABLE anstellungen

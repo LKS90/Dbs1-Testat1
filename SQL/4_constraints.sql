@@ -3,23 +3,23 @@
  * TODO: -ON DELETE CASCADE?
  *       -Additional Constraints?
  */
- 
- ALTER TABLE clubverteilungen
+
+ ALTER TABLE ligazuteilungen
  ADD CONSTRAINT fk_club
- FOREIGN KEY (club) REFERENCES clubs (clubid); 
- 
- ALTER TABLE clubverteilungen
+ FOREIGN KEY (club) REFERENCES clubs (clubid);
+
+ ALTER TABLE ligazuteilungen
  ADD CONSTRAINT fk_liga
  FOREIGN KEY (liga) REFERENCES ligen (ligaid);
- 
+
  ALTER TABLE anstellungen
  ADD CONSTRAINT fk_clubEmployer
- FOREIGN KEY (club) REFERENCES clubs (clubid); 
- 
+ FOREIGN KEY (club) REFERENCES clubs (clubid);
+
  ALTER TABLE anstellungen
  ADD CONSTRAINT fk_aEmployee
  FOREIGN KEY (angestellter) REFERENCES angestellten (angId);
- 
+
  ALTER TABLE transfers
  ADD CONSTRAINT fk_tBuyer
  FOREIGN KEY (käufer) REFERENCES clubs (clubId);
