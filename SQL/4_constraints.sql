@@ -6,19 +6,19 @@
 
  ALTER TABLE ligazuteilungen
  ADD CONSTRAINT fk_club
- FOREIGN KEY (club) REFERENCES clubs (clubid);
+ FOREIGN KEY (clubid) REFERENCES clubs (clubid);
 
  ALTER TABLE ligazuteilungen
  ADD CONSTRAINT fk_liga
- FOREIGN KEY (liga) REFERENCES ligen (ligaid);
+ FOREIGN KEY (ligaid) REFERENCES ligen (ligaid);
 
  ALTER TABLE anstellungen
  ADD CONSTRAINT fk_clubEmployer
- FOREIGN KEY (club) REFERENCES clubs (clubid);
+ FOREIGN KEY (clubId) REFERENCES clubs (clubid);
 
  ALTER TABLE anstellungen
  ADD CONSTRAINT fk_aEmployee
- FOREIGN KEY (angestellter) REFERENCES angestellten (angId);
+ FOREIGN KEY (angId) REFERENCES angestellten (angId);
 
  ALTER TABLE transfers
  ADD CONSTRAINT fk_tBuyer

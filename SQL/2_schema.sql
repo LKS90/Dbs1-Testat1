@@ -27,8 +27,8 @@ CREATE TABLE clubs (
 
 CREATE TABLE ligazuteilungen (
   ligazuteilungsId integer PRIMARY KEY,
-  club integer NOT NULL,
-  liga integer  NOT NULL
+  clubid integer NOT NULL,
+  ligaid integer  NOT NULL
 );
 
 CREATE TABLE angestellten (
@@ -43,8 +43,8 @@ CREATE TABLE angestellten (
 
 CREATE TABLE anstellungen (
   anstellungsId integer PRIMARY KEY,
-  angestellter integer NOT NULL,
-  club integer NOT NULL,
+  angId integer NOT NULL,
+  clubId integer NOT NULL,
   vertragsbeginn date NOT NULL,
   vertragsende date NOT NULL
 );

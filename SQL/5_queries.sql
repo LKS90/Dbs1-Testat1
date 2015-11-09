@@ -1,117 +1,77 @@
-/*
- * !! TODO !!
- */
+-- NOTE: With our data it is obvious we focused on FC Zürich
 
+-- JOIN OVER THREE TABLES
+-- List all players of the current first swiss league
 
--- select name,  from angestellter where salaer > 5000;
---
--- select name, salaer from angestellter where wohnort = 'Luzern' AND (salaer < 5000 OR salaer > 8000);
---
--- Select name, tel from angestellter WHERE Tel is NOT NULL ORDER BY Name ASC;
--- 
--- select name, persnr from angestellter where name like 'Widmer%';
---
-Select Distinct positon, vorname, nachname from angestellten WHERE club=1 ORDER BY positon ASC;
---
--- select chef, count(*), avg(salaer) from angestellter where chef is not NULL group by chef
--- order by count(*) DESC, avg(salaer);
---
--- select Name,Salaer AS "tiefstes Salaer" from Angestellter
--- where Salaer = (select min(Salaer) from Angestellter);
---
--- select count(*), sum (Salaer)
--- from Angestellter
--- where PersNr in
---   (select PersNr
---    from ProjektZuteilung
---    where ProjNr =
---      (select ProjNr
---       from Projekt
---       where Bezeichnung='Mars'
---       )
---   );
---
--- select AbtNr, avg(Salaer), count(*)
--- from Angestellter
--- group by AbtNr
---   having avg(Salaer) <= all
---    (select avg(Salaer) from Angestellter
---      group by AbtNr);
---
--- SELECT   name,
---          SUM(zeitanteil)
--- FROM     (SELECT name,
---                  zeitanteil,
---                  bezeichnung
---           FROM   angestellter
---                  INNER JOIN projektzuteilung
---                    ON angestellter.persnr = projektzuteilung.persnr
---                  INNER JOIN projekt
---                    ON projektzuteilung.projnr = projekt.projnr
---           WHERE  projekt.bezeichnung LIKE '%Uranus%'
---           UNION
---           SELECT name,
---                  zeitanteil,
---                  bezeichnung
---           FROM   angestellter
---                  INNER JOIN projektzuteilung
---                    ON angestellter.persnr = projektzuteilung.persnr
---                  INNER JOIN projekt
---                    ON projektzuteilung.projnr = projekt.projnr
---           WHERE  projekt.bezeichnung LIKE '%Mars%') AS projekte
--- GROUP BY name
--- ORDER BY name;
---
--- SELECT persnr
--- FROM   angestellter
--- WHERE  chef IS NULL
--- EXCEPT
--- SELECT persnr
--- FROM   projektzuteilung
---        INNER JOIN projekt
---          ON projektzuteilung.projnr = projekt.projnr
--- WHERE  bezeichnung LIKE '%Uranus%';
---
--- -- do not alter contents of the database persistently
--- BEGIN;
---
--- CREATE VIEW GutVerdienende AS
--- SELECT * FROM Angestellter
--- WHERE Salaer > 8000;
---
--- SELECT * FROM GutVerdienende;
---
--- UPDATE Angestellter SET Salaer = Salaer*1.2;
---
--- SELECT * FROM GutVerdienende;
---
--- -- forget all changes made since BEGIN
--- ROLLBACK;
---
--- -- Constraints Tests
---
--- -- do not alter contents of the database persistently
--- BEGIN;
---
--- ALTER TABLE Angestellter
--- ADD CONSTRAINT check_Salaer
---    CHECK (Salaer between 1000 and 20000);
---
--- UPDATE angestellter SET salaer=30000 where persnr = 1100;
--- select * from angestellter WHERE persnr = 1100;
---
--- -- forget all changes made since BEGIN
--- ROLLBACK;
---
--- -- do not alter contents of the database persistently
--- BEGIN;
---
--- ALTER TABLE ProjektZuteilung
--- ADD CONSTRAINT check_Zeitanteil
---    CHECK (Zeitanteil between 10 and 90);
---
--- UPDATE ProjektZuteilung SET Zeitanteil=99 where persnr = 1100;
--- select * from ProjektZuteilung WHERE persnr = 1100;
---
--- -- forget all changes made since BEGIN
--- ROLLBACK;
+select angestellten.vorname, angestellten.nachname, clubs.name, angestellten.position, angestellten.nummer, anstellungen.vertragsbeginn, anstellungen.vertragsende
+from clubs
+LEFT JOIN anstellungen ON clubs.clubid = anstellungen.clubid
+LEFT JOIN angestellten ON angestellten.angid = anstellungen.angid
+RIGHT JOIN ligazuteilungen ON clubs.clubid = ligazuteilungen.clubid
+RIGHT JOIN ligen ON ligazuteilungen.ligaid = ligen.ligaid
+ where ligen.ligaid = 2 AND angestellten.angid IS NOT NULL
+ order by clubs.name;
+
+-- GROUP BY
+-- This query counts all players who share the same position in a team and
+-- prints a list of clubs and the amount of players they have per position
+
+select position, cl.name, count(*) as "angestellten" from angestellten ang
+inner join anstellungen anst
+on ang.angid = anst.angid
+inner join clubs cl
+on cl.clubid = anst.clubid
+group by position, cl.name
+order by cl.name;
+
+-- ANY
+-- This query lists all players from one club (FC Zürich) and compares them
+-- to all players from another club (FC Basel). If the player of the first club
+-- has a higher market value than any player from the second club, then he is
+-- included in the final list. Finally it is ordered by market value.
+
+select ang.nachname, ang.marktwert
+from angestellten ang INNER JOIN anstellungen anst
+on ang.angid = anst.angid
+inner join clubs cl
+on anst.clubid = cl.clubid
+where cl.clubid = 1
+AND ang.marktwert > ANY
+  (select ang1.marktwert
+   from angestellten ang1 inner join anstellungen anst1
+   on ang1.angId = anst1.angid
+   inner join clubs cl1
+   on cl1.clubid = anst1.clubid
+   where cl1.clubid = 10)
+order by marktwert desc;
+
+-- UNTERABFRAGE (unkorreliert)
+-- This query lists all clubs from the first swiss league (lg.ligaid = 2) and
+-- their current ranking according to points. The points are calculated from the
+-- currently available results.
+
+select clb.name,
+2 * (select count(*) from begegnungen
+where heim = clb.clubid  and toreheim > toregast)
++
+2 * (select count(*) from begegnungen
+where gast = clb.clubid and toregast > toreheim)
++
+(select count(*) from begegnungen
+where gast = clb.clubid or heim = clb.clubid and toregast = toreheim)
+as points
+from (select clubs.clubid, clubs.name from clubs inner join ligazuteilungen lz on
+      clubs.clubid = lz.clubid inner join ligen lg on
+      lz.ligaid = lg.ligaid where lg.ligaid = 2) as clb
+order by points desc;
+
+-- DISTINCT
+-- Get a list of the most common last names of visitors for a club (to print
+-- some fan jerseys), limit to 20 entries.
+
+select distinct nachname, count(*)
+from zuschauer
+where lieblingsverein = 1
+group by nachname
+order by count(*) desc
+limit 20;
