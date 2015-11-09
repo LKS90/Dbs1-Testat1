@@ -3,7 +3,7 @@
  */
 
 CREATE TYPE bereiche AS enum ('Chef', 'Assistent', 'Torhüter');
-CREATE TYPE positionen AS enum ('Tor', 'verteidigung', 'Mittelfeld', 'Angriff');
+CREATE TYPE positionen AS enum ('Tor', 'Verteidigung', 'Mittelfeld', 'Angriff');
 
 /*
  * Tabellen erzeugen
@@ -21,21 +21,21 @@ CREATE TABLE clubs (
   name text NOT NULL,
   stadt text NOT NULL,
   stadion text NOT NULL,
-  budget decimal (15,6) DEFAULT 0,
+  marktwert decimal (15,6) DEFAULT 0,
   gründungsjahr smallint NOT NULL
 );
 
 CREATE TABLE clubverteilungen (
+  clubLigaId integer PRIMARY KEY,
   club integer NOT NULL,
-  liga integer  NOT NULL,
-  PRIMARY KEY(club, liga)
+  liga integer  NOT NULL
 );
 
 CREATE TABLE angestellten (
   angId integer PRIMARY KEY,
   vorname text NOT NULL,
   nachname text NOT NULL,
-  gehalt decimal (15,6) NOT NULL,
+  marktwert decimal (15,6),
   nummer integer,
   position positionen,
   bereich bereiche
@@ -43,7 +43,7 @@ CREATE TABLE angestellten (
 
 CREATE TABLE anstellungen (
   anstellungsId integer PRIMARY KEY,
-  angId integer NOT NULL,
+  angestellter integer NOT NULL,
   club integer NOT NULL,
   vertragsbeginn date NOT NULL,
   vertragsende date NOT NULL
@@ -60,14 +60,14 @@ CREATE TABLE transfers (
   summe decimal(15,6)
 );
 
-CREATE TABLE begegnungnen (
+CREATE TABLE begegnungen (
   begegnungsId integer  PRIMARY KEY,
   heim integer NOT NULL,
   gast integer  NOT NULL,
   spieldatum date NOT NULL,
   austragungsort text NOT NULL,
-  toreHeim integer NOT NULL,
-  toreGast integer NOT NULL
+  toreHeim integer,
+  toreGast integer
 );
 
 CREATE TABLE zuschauer (

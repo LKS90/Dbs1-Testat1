@@ -58,7 +58,7 @@ h3 {
 <p>Angestellten(<pk>AngId</pk> INT, <br>
     Vorname TEXT NOT NULL, <br>
     Nachname TEXT NOT NULL, <br>
-    Gehalt DOUBLE NOT NULL, <br>
+    Marktwert DOUBLE NOT NULL, <br>
     Nummer INT, <br>
     Position TEXT, <br>
     Bereich TEXT) </p>
@@ -82,7 +82,7 @@ h3 {
     <fk>Heim</fk> REFERENCES Clubs(ClubId), <br>
     <fk>Gast</fk> REFERENCES Clubs(ClubId), <br>
     Spieldatum DATE, <br>
-    <fk>Austragungsort</fk> NOT NULL REFERENCES Clubs(Stadion), <br>
+    Austragungsort NOT NULL, <br>
     ToreHeim INT, <br>
     ToreGast INT)</p>
 <hr>

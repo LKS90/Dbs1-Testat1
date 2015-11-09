@@ -3,7 +3,7 @@
  */
 
 
--- select name, salaer from angestellter where salaer > 5000;
+-- select name,  from angestellter where salaer > 5000;
 --
 -- select name, salaer from angestellter where wohnort = 'Luzern' AND (salaer < 5000 OR salaer > 8000);
 --
@@ -11,7 +11,7 @@
 -- 
 -- select name, persnr from angestellter where name like 'Widmer%';
 --
--- Select Distinct Wohnort, Name from angestellter WHERE AbtNr=3 ORDER BY Wohnort ASC;
+Select Distinct positon, vorname, nachname from angestellten WHERE club=1 ORDER BY positon ASC;
 --
 -- select chef, count(*), avg(salaer) from angestellter where chef is not NULL group by chef
 -- order by count(*) DESC, avg(salaer);
