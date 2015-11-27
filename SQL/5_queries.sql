@@ -75,3 +75,55 @@ where lieblingsverein = 1
 group by nachname
 order by count(*) desc
 limit 20;
+
+-- Test CHECK constraints
+BEGIN TRANSACTION;
+INSERT INTO anstellungen (anstellungsid, angId, clubId, vertragsbeginn, vertragsende) VALUES
+(1, 1200, 1, '2016/8/31', '2016/6/30');
+ROLLBACK;
+BEGIN TRANSACTION;
+INSERT INTO ligen (ligaid, name, preisgeld, saisonstart, saisonende) VALUES
+(200, 'Lega Nazionale Professionist Seria A', 1200000.0, '2016/8/31', '2016/5/15');
+ROLLBACK;
+
+-- Query with CTE
+-- get all players transfered by FC Vaduz (clubid = 4)
+select vorname, nachname, position, alteposition, nummer, altenummer
+from (select * from transfers join angestellten as ang on transferierter = ang.angid) as tranferees 
+where käufer = 4 or verkäufer = 4;
+
+WITH tranferees as (select * from transfers join angestellten as ang on transferierter = ang.angid)
+select vorname, nachname, position, altePosition, nummer, alteNummer from tranferees where käufer = 4 or verkäufer = 4;
+
+
+-- Query with windows function
+select spieler.avg, name
+from (select avg(ang1.marktwert) over (partition by cl1.name), ang1.vorname, ang1.nachname, cl1.name from angestellten ang1
+  inner join anstellungen anst1 
+  on ang1.angId = anst1.angid 
+  inner join clubs cl1 
+  on cl1.clubid = anst1.clubid) as spieler
+group by name, spieler.avg;
+
+-- View
+CREATE VIEW angestellteCurrentFirstSwissLeague as (
+  select clubs.name, angestellten.vorname, angestellten.nachname, angestellten.nummer, angestellten.position from angestellten
+  join anstellungen on angestellten.angid = anstellungen.angid
+  join clubs on clubs.clubid = anstellungen.clubid
+  join ligazuteilungen on clubs.clubid = ligazuteilungen.clubid
+  where ligazuteilungen.ligaid = 2
+  order by clubs.name
+);
+
+-- test view with query
+select * from angestelltecurrentfirstswissleague where name = 'FC Zürich';
+
+-- updatable View
+CREATE VIEW trainer as (
+  select * from angestellten
+  where angestellten.bereich is not null
+);
+
+UPDATE trainer
+set bereich = 'Chef'
+where angid=1002;

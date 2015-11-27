@@ -13,7 +13,8 @@ CREATE TABLE ligen (
   ligaId integer  PRIMARY KEY,
   name text NOT NULL,
   preisgeld decimal(15, 6) DEFAULT 0,
-  saison serial NOT NULL
+  saisonstart date NOT NULL,
+  saisonende date NOT NULL
 );
 
 CREATE TABLE clubs (
@@ -53,6 +54,7 @@ CREATE TABLE transfers (
   transferId integer PRIMARY KEY,
   käufer integer NOT NULL,
   verkäufer integer,
+  ausleihe boolean NOT NULL,
   transferierter integer NOT NULL,
   altePosition positionen,
   alteNummer integer,
@@ -61,7 +63,7 @@ CREATE TABLE transfers (
 );
 
 CREATE TABLE begegnungen (
-  begegnungsId integer  PRIMARY KEY,
+  begegnungsId serial PRIMARY KEY,
   heim integer NOT NULL,
   gast integer  NOT NULL,
   spieldatum date NOT NULL,

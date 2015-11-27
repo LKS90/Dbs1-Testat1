@@ -29,15 +29,15 @@ INSERT INTO clubs (clubId, name, stadt, stadion, marktwert, gründungsjahr) VALU
 
 -- TABLE ligen
 
-INSERT INTO ligen (ligaid, name, preisgeld, saison) VALUES
-(1, 'Lega Nazionale Professionist Seria A', 1200000.0, 2016),
-(2, 'Raiffeisen Super League', 1000000.0, 2016),
-(3, 'Brack.ch Challenge League', 200000.0, 2016),
-(4, 'Bundesliga', 5000000.0, 2016),
-(5, '2. Bundesliga', 1000000.0, 2016),
-(6, 'Axpo Super League', 800000.0, 2009),
-(7, 'Bundesliga', 5000000.0, 2009),
-(8, 'Fussball-Regionalliga Nord', 5000.0, 2016);
+INSERT INTO ligen (ligaid, name, preisgeld, saisonstart, saisonende) VALUES
+(1, 'Lega Nazionale Professionist Seria A', 1200000.0, '2015/8/31', '2016/5/15'),
+(2, 'Raiffeisen Super League', 1000000.0, '2015/7/18', '2016/5/25'),
+(3, 'Brack.ch Challenge League', 200000.0, '2015/8/13', '2016/5/14'),
+(4, 'Bundesliga', 5000000.0, '2015/8/13', '2016/5/14'),
+(5, '2. Bundesliga', 1000000.0, '2008/6/18', '2009/7/13'),
+(6, 'Axpo Super League', 800000.0, '2008/7/25', '2009/6/13'),
+(7, 'Bundesliga', 5000000.0, '2008/8/15', '2009/5/23'),
+(8, 'Fussball-Regionalliga Nord', 5000.0, '2015/7/24', '2016/5/21');
 
 -- Table ligazuteilungen
 INSERT INTO ligazuteilungen (ligazuteilungsId, clubid, ligaid) VALUES
@@ -110,6 +110,20 @@ INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position,
 (1035, 'Mergim', 'Brahimi', 500000.0, 11, 'Mittelfeld', NULL),
 (1036, 'Sandro', 'Lombardi', 200000.0, 12, 'Mittelfeld', NULL),
 (1037, 'Albian', 'Ajeti', 600000.0, 38, 'Mittelfeld', NULL);
+
+-- Test wrong ENUM
+BEGIN TRANSACTION;
+INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
+(1038, 'Sami', 'Hyypiä', NULL, NULL, NULL, 'Verteidigung');
+ROLLBACK;
+BEGIN TRANSACTION;
+INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
+(1038, 'Sami', 'Hyypiä', NULL, NULL, 'MitteMitte', 'Koch');
+ROLLBACK;
+BEGIN TRANSACTION;
+INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
+(1038, 'Sami', 'Hyypiä', NULL, NULL, 'HintermTor', 'Chef');
+ROLLBACK;
 
 -- TABLE anstellungen
 INSERT INTO anstellungen (anstellungsid, angId, clubId, vertragsbeginn, vertragsende) VALUES
@@ -22358,46 +22372,52 @@ INSERT INTO zuschauerverteilungen (zuschauerVerteilungsId, spiel, besucher) VALU
 (19200, 32, 2257);
 
 -- TABLE Transfers
-INSERT INTO transfers (transferId, käufer, verkäufer, transferierter, altePosition, alteNummer, alterBereich, summe) VALUES
-(1, 4, NULL, 1030, NULL, NULL, NULL, 0),
-(2, 1, 13, 1008, 'Verteidigung', NULL, NULL, 200000.0),
-(3, 7, 18, 1031, 'Mittelfeld', 4, NULL, 0),
-(4, 10, 4, 1032, 'Verteidigung', NULL, NULL, 0),
-(5, 4, 19, 1033, 'Angriff', 12, NULL, NULL),
-(6, 9, 20, 1034, 'Mittelfeld', 10, NULL, NULL),
-(7, 21, 22, 1035, 'Mittelfeld', 66, NULL, NULL);
+INSERT INTO transfers (transferId, käufer, verkäufer, ausleihe, transferierter, altePosition, alteNummer, alterBereich, summe) VALUES
+(1, 17, 1, 'FALSE', 1030, NULL, NULL, NULL, 0),
+(2, 1, 13, 'TRUE', 1008, 'Verteidigung', NULL, NULL, 200000.0),
+(3, 4, NULL, 'FALSE', 1031, 'Mittelfeld', 4, NULL, 0),
+(4, 7, 18, 'FALSE', 1032, 'Verteidigung', NULL, NULL, 0),
+(5, 4, 10, 'TRUE', 1033, 'Angriff', 12, NULL, NULL),
+(6, 4, 19, 'FALSE', 1034, 'Mittelfeld', 10, NULL, NULL),
+(7, 9, 20, 'FALSE', 1035, 'Mittelfeld', 66, NULL, NULL);
+
+-- Test wrong inserts
+BEGIN TRANSACTION;
+INSERT INTO transfers (transferId, käufer, verkäufer, ausleihe, transferierter, altePosition, alteNummer, alterBereich, summe) VALUES
+(1, 17, 1, 'HALLO', 1030, NULL, NULL, NULL, 0);
+ROLLBACK;
 
 -- TABLE  begegnungen
-INSERT INTO begegnungen (begegnungsid, heim, gast, spieldatum, austragungsort, toreheim, toregast) VALUES
-(1, 7, 6, '2015/7/18', 'Swissporarena', 2, 2),
-(2, 1, 5, '2015/7/18', 'Letzigrund', 1, 1),
-(3, 10, 4, '2015/7/19', 'St. Jakob-Park', 2, 0),
-(4, 3, 9, '2015/7/19', 'Arenaa Thun', 3, 5),
-(5, 2, 8, '2015/7/19', 'AFG Arena', 2, 0),
-(6, 5, 7, '2015/7/25', 'Stade de Suisse', 1, 1),
-(7, 9, 10, '2015/7/25', 'Letzigrund', 2, 3),
-(8, 8, 3, '2015/7/26', 'Stadio Comaredo', 2, 3),
-(9, 6, 2, '2015/7/26', 'Stade Tourbillon', 1, 0),
-(10, 4, 1, '2015/7/26', 'Rheinpark Stadion', 2, 2),
-(11, 10, 6, '2015/8/1', 'St. Jakob-Park', 3, 0),
-(12, 2, 5, '2015/8/1', 'AFG Arena', 1, 1),
-(13, 3, 7, '2015/8/2', 'Arena Thun', 0, 1),
-(14, 8, 4, '2015/8/2', 'Stadio Comaredo', 1, 0),
-(15, 1, 9, '2015/8/2', 'Letzigrund', 2, 3),
-(16, 9, 8, '2015/8/8', 'Letzigrund', 1, 3),
-(17, 7, 10, '2015/8/8', 'Swissporarena', 2, 2),
-(18, 4, 6, '2015/8/9', 'Rheinpark Stadion', 1, 1),
-(19, 2, 1, '2015/8/2', 'AFG Arena', 0, 2),
-(20, 5, 3, '2015/8/2', 'Stade de Suisse', 3, 1),
-(21, 9, 3, '2015/8/12', 'St. Jakob-Park', 3, 1),
-(22, 5, 8, '2015/8/12', 'Stade de Suisse', 0, 1),
-(23, 7, 2, '2015/8/12', 'Swissporarena', 0, 1),
-(24, 4, 9, '2015/8/13', 'Rheinpark Stadion', 3, 3),
-(25, 6, 1, '2015/8/13', 'Stade Tourbillon', 3, 1),
-(26, 8, 10, '2015/8/29', 'Stadio Comaredo', 1, 3),
-(27, 1, 1, '2015/8/29', 'Letzigrund', 2, 5),
-(28, 1, 4, '2015/11/7', 'Letzigrund', NULL, NULL),
-(29, 8, 5, '2015/11/7', 'Stadio Comaredo', NULL, NULL),
-(30, 3, 2, '2015/11/8', 'Arena Thun', NULL, NULL),
-(31, 6, 7, '2015/11/8', 'Stade Tourbillon', NULL, NULL),
-(32, 10, 9, '2015/11/8', 'St. Jakob-Park', NULL, NULL);
+INSERT INTO begegnungen (heim, gast, spieldatum, austragungsort, toreheim, toregast) VALUES
+(7, 6, '2015/7/18', 'Swissporarena', 2, 2),
+(1, 5, '2015/7/18', 'Letzigrund', 1, 1),
+(10, 4, '2015/7/19', 'St. Jakob-Park', 2, 0),
+(3, 9, '2015/7/19', 'Arenaa Thun', 3, 5),
+(2, 8, '2015/7/19', 'AFG Arena', 2, 0),
+(5, 7, '2015/7/25', 'Stade de Suisse', 1, 1),
+(9, 10, '2015/7/25', 'Letzigrund', 2, 3),
+(8, 3, '2015/7/26', 'Stadio Comaredo', 2, 3),
+(6, 2, '2015/7/26', 'Stade Tourbillon', 1, 0),
+(4, 1, '2015/7/26', 'Rheinpark Stadion', 2, 2),
+(10, 6, '2015/8/1', 'St. Jakob-Park', 3, 0),
+(2, 5, '2015/8/1', 'AFG Arena', 1, 1),
+(3, 7, '2015/8/2', 'Arena Thun', 0, 1),
+(8, 4, '2015/8/2', 'Stadio Comaredo', 1, 0),
+(1, 9, '2015/8/2', 'Letzigrund', 2, 3),
+(9, 8, '2015/8/8', 'Letzigrund', 1, 3),
+(7, 10, '2015/8/8', 'Swissporarena', 2, 2),
+(4, 6, '2015/8/9', 'Rheinpark Stadion', 1, 1),
+(2, 1, '2015/8/2', 'AFG Arena', 0, 2),
+(5, 3, '2015/8/2', 'Stade de Suisse', 3, 1),
+(9, 3, '2015/8/12', 'St. Jakob-Park', 3, 1),
+(5, 8, '2015/8/12', 'Stade de Suisse', 0, 1),
+(7, 2, '2015/8/12', 'Swissporarena', 0, 1),
+(4, 9, '2015/8/13', 'Rheinpark Stadion', 3, 3),
+(6, 1, '2015/8/13', 'Stade Tourbillon', 3, 1),
+(8, 10, '2015/8/29', 'Stadio Comaredo', 1, 3),
+(1, 1, '2015/8/29', 'Letzigrund', 2, 5),
+(1, 4, '2015/11/7', 'Letzigrund', NULL, NULL),
+(8, 5, '2015/11/7', 'Stadio Comaredo', NULL, NULL),
+(3, 2, '2015/11/8', 'Arena Thun', NULL, NULL),
+(6, 7, '2015/11/8', 'Stade Tourbillon', NULL, NULL),
+(10, 9, '2015/11/8', 'St. Jakob-Park', NULL, NULL);

@@ -51,3 +51,11 @@
  ALTER TABLE zuschauerverteilungen
  ADD CONSTRAINT fk_vdVisitor
  FOREIGN KEY (besucher) REFERENCES zuschauer (zuschauerId);
+ 
+ ALTER TABLE anstellungen
+ ADD CONSTRAINT ck_date
+ CHECK (vertragsbeginn < vertragsende);
+ 
+ ALTER TABLE ligen
+ ADD CONSTRAINT ck_date
+ CHECK (saisonstart < saisonende);
