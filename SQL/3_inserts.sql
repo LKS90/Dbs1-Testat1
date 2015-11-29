@@ -111,6 +111,9 @@ INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position,
 (1036, 'Sandro', 'Lombardi', 200000.0, 12, 'Mittelfeld', NULL),
 (1037, 'Albian', 'Ajeti', 600000.0, 38, 'Mittelfeld', NULL);
 
+\echo -------------------------------------
+\echo Test wrong insert for enum
+\echo -------------------------------------
 -- Test wrong ENUM
 BEGIN TRANSACTION;
 INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
@@ -118,7 +121,7 @@ INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position,
 ROLLBACK;
 BEGIN TRANSACTION;
 INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
-(1038, 'Sami', 'Hyypiä', NULL, NULL, 'MitteMitte', 'Koch');
+(1038, 'Sami', 'Hyypiä', NULL, NULL, 'TRUE', 'FALSE');
 ROLLBACK;
 BEGIN TRANSACTION;
 INSERT INTO angestellten (angid, vorname, nachname, marktwert, nummer, position, bereich) VALUES
@@ -22381,6 +22384,9 @@ INSERT INTO transfers (transferId, käufer, verkäufer, ausleihe, transferierter
 (6, 4, 19, 'FALSE', 1034, 'Mittelfeld', 10, NULL, NULL),
 (7, 9, 20, 'FALSE', 1035, 'Mittelfeld', 66, NULL, NULL);
 
+\echo -------------------------------------
+\echo Test wrong insert for boolean:
+\echo -------------------------------------
 -- Test wrong inserts
 BEGIN TRANSACTION;
 INSERT INTO transfers (transferId, käufer, verkäufer, ausleihe, transferierter, altePosition, alteNummer, alterBereich, summe) VALUES

@@ -9,9 +9,6 @@ SET client_min_messages = ERROR;
 \set database fussballligen
 \set promptvar ''
 
-\prompt 'DROP USER [':user'] and DROP DATABASE [':database'] if existing (\\q or Ctrl-C to abort)?' promptvar
-:promptvar
-
 DROP DATABASE if exists :database;
 DROP USER if exists :user;
 
@@ -19,9 +16,6 @@ DROP USER if exists :user;
 \echo passwort for user :user = :password
 \echo -------------------------------------
 \echo
-
-\prompt 'CREATE USER [':user'] and DATABASE [':database'] (\\q or Ctrl-C to abort)?' promptvar
-:promptvar
 
 DROP DATABASE if exists :database;
 DROP USER if exists :user;

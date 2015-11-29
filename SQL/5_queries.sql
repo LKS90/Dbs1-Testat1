@@ -89,7 +89,7 @@ ROLLBACK;
 -- Query with CTE
 -- get all players transfered by FC Vaduz (clubid = 4)
 select vorname, nachname, position, alteposition, nummer, altenummer
-from (select * from transfers join angestellten as ang on transferierter = ang.angid) as tranferees 
+from (select * from transfers join angestellten as ang on transferierter = ang.angid) as tranferees
 where käufer = 4 or verkäufer = 4;
 
 WITH tranferees as (select * from transfers join angestellten as ang on transferierter = ang.angid)
@@ -99,15 +99,15 @@ select vorname, nachname, position, altePosition, nummer, alteNummer from tranfe
 -- Query with windows function
 select spieler.avg, name
 from (select avg(ang1.marktwert) over (partition by cl1.name), ang1.vorname, ang1.nachname, cl1.name from angestellten ang1
-  inner join anstellungen anst1 
-  on ang1.angId = anst1.angid 
-  inner join clubs cl1 
+  inner join anstellungen anst1
+  on ang1.angId = anst1.angid
+  inner join clubs cl1
   on cl1.clubid = anst1.clubid) as spieler
 group by name, spieler.avg;
 
 -- View
 CREATE VIEW angestellteCurrentFirstSwissLeague as (
-  select clubs.name, angestellten.vorname, angestellten.nachname, angestellten.nummer, angestellten.position from angestellten
+  select clubs.name as clubname, angestellten.vorname, angestellten.nachname, angestellten.nummer, angestellten.position, angestellten.bereich from angestellten
   join anstellungen on angestellten.angid = anstellungen.angid
   join clubs on clubs.clubid = anstellungen.clubid
   join ligazuteilungen on clubs.clubid = ligazuteilungen.clubid
@@ -116,14 +116,15 @@ CREATE VIEW angestellteCurrentFirstSwissLeague as (
 );
 
 -- test view with query
-select * from angestelltecurrentfirstswissleague where name = 'FC Zürich';
+select * from angestelltecurrentfirstswissleague where clubname = 'FC Zürich';
 
--- updatable View
+-- create updatable View
 CREATE VIEW trainer as (
   select * from angestellten
   where angestellten.bereich is not null
 );
 
+-- update the new view
 UPDATE trainer
 set bereich = 'Chef'
 where angid=1002;
