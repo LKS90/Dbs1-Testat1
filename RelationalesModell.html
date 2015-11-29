@@ -41,7 +41,8 @@ h3 {
 <p>Ligen(<pk>LigaId</pk> INT, <br>
     Name TEXT NOT NULL, <br>
     Preisgeld DOUBLE NOT NULL, <br>
-    Saison INT NOT NULL)</p>
+    Saisonbeginn date NOT NULL, <br>
+		Saisonende date NOT NULL)</p>
 <hr>
 <p>Clubs(<pk>ClubId</pk> INT, <br>
     Name TEXT NOT NULL, <br>
@@ -72,6 +73,7 @@ h3 {
     <fk>Käufer</fk> REFERENCES Clubs(ClubId), <br>
     <fk>Verkäufer</fk> REFERENCES Clubs(ClubId), <br>
     <fk>Transferierter</fk> REFERENCES Angestellten(AngId), <br>
+		Ausleihe BOOLEAN NOT NUll, <br>
     Summe DOUBLE NOT NULL, <br>
 		altePosition ENUM, <br>
 		alteNummer INT, <br>
